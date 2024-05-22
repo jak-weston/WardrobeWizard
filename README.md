@@ -3,5 +3,11 @@ Implementation of cycle GAN-based model capable transforming a person’s clothi
 
 Paper: https://arxiv.org/pdf/1710.07346
 
-1. Try to the read the paper
-2. Try to create a plan based on the paper. - How to clean the dataset and setup model/model training
+## Steps 
+
+1. Reimplement G_shape GAN
+   1. Create Data loader for training loop
+   2. Implement GAN structure (generator / discriminator)
+   3. Train
+   4. Test
+2. Reimplement G_image
