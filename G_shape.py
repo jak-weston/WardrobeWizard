@@ -25,7 +25,7 @@ segmented_images = dataloader.load_segmented_images()
 text = dataloader.get_text_data()
 
 # Bi-cubic down sample on segmented image
-def bicubic_downsample(image, scale=1/16):
+def bicubic_downsample(image, scale=[1,1, 1/16, 1/16]):
   """
   Downsamples an image using bicubic interpolation with SciPy.
 
