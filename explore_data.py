@@ -21,5 +21,6 @@ text = text['hn2']
 print(text.shape)
 print(G1['b_'].shape)
 
+
 #For Gshape I need segmentation map and text description
 # %%
