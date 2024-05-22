@@ -24,3 +24,11 @@ print(G1['b_'].shape)
 
 #For Gshape I need segmentation map and text description
 # %%
+
+# exploring through language_origional.mat
+from scipy.io import loadmat, savemat
+import numpy as np
+
+mat = loadmat('data_release/benchmark/language_original.mat')
+print(mat.shape)
+print(mat)
