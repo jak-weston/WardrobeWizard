@@ -1,34 +1,36 @@
 #%%
 import h5py
 import scipy.io
+import dataloader
+import torch
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-#We need I0 (image), S0 (segmentation map), and text description d
-text = scipy.io.loadmat('./data/test_phase_inputs/encode_hn2_rnn_100_2_full.mat')
+text = dataloader.get_text_data()
 
-G1 = h5py.File('./data/supervision_signals/G1.h5', 'r')
-
-# %%
-
-print(G1.keys())
-
-for key in G1.keys():
-    print(key)
-    print(G1[key])
-# %%
-print (text.keys())
-text = text['hn2']
+segmented_images = dataloader.load_segmented_images()
 #%%
-print(text.shape)
-print(G1['b_'].shape)
 
-
-#For Gshape I need segmentation map and text description
-# %%
-
-# exploring through language_origional.mat
-from scipy.io import loadmat, savemat
+# Plot first segmented image with legend
+import matplotlib.pyplot as plt
 import numpy as np
+plt.imshow(segmented_images[0][0].T, cmap='jet')
+plt.colorbar()
+plt.show()
+#%%
+segment_map = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 4,
+    4: 4,
+    5: 4,
+    6: 4
+}# %%
 
-mat = loadmat('data_release/benchmark/language_original.mat')
-print(mat.shape)
-print(mat)
+# apply the segment map to the first segmented image
+down_sampled = torch.tensor([segment_map[x] for x in segmented_images[0].flatten()]).reshape(segmented_images[0].shape)
+plt.imshow(down_sampled[0].T, cmap='jet')
+plt.colorbar()
+plt.show()
+
+# %%
