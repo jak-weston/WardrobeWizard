@@ -252,16 +252,20 @@ fixed_noise = torch.randn(batch_size, nz, 1, 1).to(device)
 img_list = []
 G_losses = []
 D_losses = []
+D_guess_fake = []
+D_guess_real = []
 
 iters = 0
 
 print("Starting Training Loop...")
 torch.autograd.set_detect_anomaly(True)
-num_epochs = 1
+num_epochs = 5
 for epoch in range(num_epochs):
   for i in range(0, segmented_images.shape[0], batch_size):
     segmented_images_batch = segmented_images[i:i+batch_size]
     text_batch = text[i:i+batch_size]
+    if segmented_images_batch.shape[0] != batch_size:
+        break
     condition = torch.where(segmented_images_batch >= 3 , 3, segmented_images_batch).float() # batch_size x 1 x 128 x 128
     condition = nn.functional.one_hot(condition.to(torch.int64), num_classes=4).permute(0,4,1,2,3).float().squeeze(2) # batch_size x 4 x 128 x 128
     condition = nn.functional.interpolate(condition, size=(lr_win_size, lr_win_size), mode='bicubic') # batch_size x 4 x 8 x 8
@@ -313,17 +317,26 @@ for epoch in range(num_epochs):
     if (iters % 500 == 0) or ((epoch == num_epochs-1) and (i == len(segmented_images)-1)):
         with torch.no_grad():
             fake = netG(fixed_noise, text_batch, condition).detach().cpu()
-        img_list.append(fake)
+            img_list.append(fake)
+            torch.save(netG.state_dict(), f'G_shape_results/netG_{iters}.pth')
+            torch.save(netD.state_dict(), 'G_shape_results/netD.pth')
+            torch.save({
+                'G_losses': G_losses,
+                'D_losses': D_losses,
+                'img_list': img_list
+            }, 'G_shape_results/training_data.pth')
+        
     iters += 1
+       
 
 # Save everything
 
-torch.save(netG.state_dict(), 'netG.pth')
-torch.save(netD.state_dict(), 'netD.pth')
+torch.save(netG.state_dict(), 'G_shape_results/netG.pth')
+torch.save(netD.state_dict(), 'G_shape_results/netD.pth')
 
 torch.save({
     'G_losses': G_losses,
     'D_losses': D_losses,
     'img_list': img_list
-}, 'training_data.pth')
+}, 'G_shape_results/training_data.pth')
 #%%
