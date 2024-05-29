@@ -7,7 +7,7 @@ from torch.autograd import Variable
 from scipy.io import loadmat
 
 # Load the .mat file
-mat = loadmat('data_release/benchmark/language_original.mat')
+mat = loadmat('data/language_original.mat')
 
 # Access the variables through the dictionary
 for k, v in mat.items():
@@ -27,7 +27,7 @@ dim_sleeve = 4
 num_layers = 2
 
 # Load the indices
-mat = loadmat('data_release/benchmark/ind.mat')
+mat = loadmat('data/ind.mat')
 # Inspect the structure of 'train_ind'
 train_ind_array = mat['train_ind']
 print("Shape of 'train_ind':", train_ind_array.shape)
@@ -122,4 +122,4 @@ for iter in range(1000000 * 10):
               f'gender({loss_gender.item():.5f}), sleeve({loss_sleeve.item():.5f})')
 
     if iter % 100000 == 1:
-        torch.save(model.state_dict(), 'rnn_latest.pth')
+        torch.save(model.state_dict(), 'data/rnn_latest.pth')

@@ -7,7 +7,7 @@ from scipy.io import loadmat
 from scipy.io import savemat
 
 # Load the .mat file
-mat = loadmat('data_release/benchmark/language_original.mat')
+mat = loadmat('data/language_original.mat')
 
 # Access the variables through the dictionary
 for k, v in mat.items():
@@ -64,7 +64,7 @@ class define_network(nn.Module):
 model = define_network().to(device)
 
 # Load the model state
-model.load_state_dict(torch.load('rnn_latest.pth', map_location=device))
+model.load_state_dict(torch.load('data/rnn_latest.pth', map_location=device))
 
 # Define the criterion
 criterion = nn.CrossEntropyLoss().to(device)
@@ -104,4 +104,4 @@ for sample_id in range(m):
 
 # Save the results
 result = {"hn2": test_hn2}
-savemat("encode_hn2_rnn_100_2_full.mat", result)
+savemat("data/encode_hn2_rnn_100_2_full.mat", result)
