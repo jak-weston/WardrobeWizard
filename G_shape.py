@@ -8,6 +8,7 @@ import numpy as np
 
 # Example usage (similar to OpenCV example)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = "mps"
 
 nt = config['nt']
 nz = config['nz']
@@ -260,6 +261,7 @@ iters = 0
 print("Starting Training Loop...")
 torch.autograd.set_detect_anomaly(True)
 num_epochs = 5
+num_epochs = 5
 for epoch in range(num_epochs):
   for i in range(0, segmented_images.shape[0], batch_size):
     segmented_images_batch = segmented_images[i:i+batch_size]
@@ -338,5 +340,5 @@ torch.save({
     'G_losses': G_losses,
     'D_losses': D_losses,
     'img_list': img_list
-}, 'G_shape_results/training_data.pth')
+}, './G_Shape_results/training_data.pth')
 #%%
