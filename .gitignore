@@ -5,3 +5,6 @@ data_release/supervision_signals/G1.h5
 data_release/test_phase_inputs/encode_hn2_rnn_100_2_full.mat
 data_release/test_phase_inputs/sr1_8.mat
 G_shape_results/
+G_shape_results_0/
+
+__pycache__/
