@@ -258,9 +258,11 @@ D_guess_real = []
 
 iters = 0
 
+lambda_fake = config['lambda_fake']
+lambda_mismatch = config['lambda_mismatch']
+
 print("Starting Training Loop...")
-torch.autograd.set_detect_anomaly(True)
-num_epochs = 5
+
 num_epochs = 5
 for epoch in range(num_epochs):
   for i in range(0, segmented_images.shape[0], batch_size):
@@ -293,7 +295,7 @@ for epoch in range(num_epochs):
     fake = netG(noise, text_batch, condition)
     label.fill_(fake_label)
     output = netD(fake.detach(), text_batch, condition)
-    errD_fake = criterion(output, label)
+    errD_fake = lambda_mismatch * criterion(output, label)
     errD_fake.backward()
     D_G_z1 = output.mean().item()
     errD = errD_real + errD_fake
@@ -305,7 +307,7 @@ for epoch in range(num_epochs):
 
     output = netD(fake, text_batch, condition)
 
-    errG = criterion(output, label)
+    errG = lambda_fake * criterion(output, label)
     errG.backward()
     D_G_z2 = output.mean().item()
     optimizerG.step()

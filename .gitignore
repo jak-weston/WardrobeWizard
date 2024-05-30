@@ -7,4 +7,6 @@ data_release/test_phase_inputs/sr1_8.mat
 G_shape_results/
 G_shape_results_0/
 
+G_image_results/
+
 __pycache__/

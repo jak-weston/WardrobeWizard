@@ -11,6 +11,8 @@ config['lr_win_size'] = 8
 config['n_map_all'] = 7
 config['n_condition'] = 4
 
+config['n_c'] = 3
+
 config['nz'] = 80
 config['nt_input'] = 100
 config['nt'] = 20

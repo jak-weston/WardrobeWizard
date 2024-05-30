@@ -10,3 +10,11 @@ def get_text_data():
 def load_segmented_images():
     G2 = h5py.File('./data/G2.h5', 'r')
     return torch.tensor(np.array(G2['b_']))
+
+def load_full_images():
+    G2 = h5py.File('./data/G2.h5', 'r')
+    return torch.tensor(np.array(G2['ih']))
+
+def get_image_mean():
+    G2 = h5py.File('./data/G2.h5', 'r')
+    return torch.tensor(np.array(G2['ih_mean']))

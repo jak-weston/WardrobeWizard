@@ -4,7 +4,16 @@ import scipy.io
 import dataloader
 import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+G2 = h5py.File('./data/G2.h5', 'r')
 
+#%%
+import matplotlib.pyplot as plt
+
+print(G2.keys())
+print(G2['ih'][0])
+img = G2['ih'][0] + G2['ih_mean']
+plt.imshow(img.T, cmap='jet')
+#%%
 text = dataloader.get_text_data()
 
 segmented_images = dataloader.load_segmented_images()
@@ -34,3 +43,4 @@ plt.colorbar()
 plt.show()
 
 # %%
+G2 = h5py.File('./data/G2.h5', 'r')
