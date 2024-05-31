@@ -1,4 +1,6 @@
 #%%
+print("Starting imports")
+
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -8,13 +10,15 @@ from net_graph_h1 import Generator, Discriminator
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load data
+print("Done with imports")
+# Load data 
 input_data = get_text_data().to(device)
 input_segments = load_segmented_images().to(device)
 input_images = load_full_images().to(device)
 
 image_mean = get_image_mean()
 
+print("Done with loading Data")
 l = 100
 lambda_fake = config['lambda_fake']
 lambda_mismatch = config['lambda_mismatch']
