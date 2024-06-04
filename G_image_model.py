@@ -27,7 +27,7 @@ class Generator(nn.Module):
         self.g2_deconv1 = nn.ConvTranspose2d(ngf * 8, ngf * 8, 4, 2, 1)
         self.g2_bn1 = nn.BatchNorm2d(ngf * 8)
         
-        self.condition_conv1 = nn.Conv2d(1, ngf, 4, 2, 1)
+        self.condition_conv1 = nn.Conv2d(7, ngf, 4, 2, 1)
         self.condition_bn1 = nn.BatchNorm2d(ngf)
         
         self.f1_conv1 = nn.Conv2d(ngf, ngf * 2, 4, 2, 1)
@@ -139,7 +139,7 @@ class Discriminator(nn.Module):
         self.d2_conv1 = nn.Conv2d(ndf * 2, ndf * 4, 4, 2, 1)
         self.d2_bn1 = nn.BatchNorm2d(ndf * 4)
         
-        self.output_condition_conv1 = nn.Conv2d(1, ndf, 4, 2, 1)
+        self.output_condition_conv1 = nn.Conv2d(7, ndf, 4, 2, 1)
 
         self.c1_conv1 = nn.Conv2d(ndf, ndf * 2, 4, 2, 1)
         self.c1_bn1 = nn.BatchNorm2d(ndf * 2)

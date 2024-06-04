@@ -8,5 +8,11 @@ G_shape_results/
 G_shape_results_0/
 
 G_image_results/
+G_image_results_0.7/
+G_image_results_0.8/
+G_image_results_0.9/
+G_shape_results_0.8/
+G_shape_results_0.9/
+
 
 __pycache__/

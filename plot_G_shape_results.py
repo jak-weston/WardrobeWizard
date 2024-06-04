@@ -3,7 +3,7 @@ import torch
 import os
 # Read results
 
-results = torch.load('G_shape_results/training_data.pth')
+results = torch.load('G_shape_results_0.8/training_data.pth')
 
 G_losses = results['G_losses']
 D_losses = results['D_losses']

@@ -6,7 +6,7 @@ import torch.optim as optim
 import torch.nn as nn
 from config import config
 from dataloader import get_text_data, load_segmented_images, load_full_images, get_image_mean
-from net_graph_h1 import Generator, Discriminator
+from G_image_model import Generator, Discriminator
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -22,6 +22,11 @@ print("Done with loading Data")
 l = 100
 lambda_fake = config['lambda_fake']
 lambda_mismatch = config['lambda_mismatch']
+
+#check results directory exists
+import os
+if not os.path.exists(f'G_image_results_{lambda_fake}'):
+    os.makedirs(f'G_image_results_{lambda_fake}')
 
 # Initialize models
 netG = Generator().to(device)
@@ -54,10 +59,15 @@ for epoch in range(num_epochs):
         batch_data = input_images[i:i + batchsize].float()
         batch_condition = input_segments[i:i + batchsize].float()
         batch_encode = batch_encode.unsqueeze(2).unsqueeze(3)
+        if batch_data.shape[0] != batchsize:
+            break
+
+        #one hot encode condition
+        batch_condition = nn.functional.one_hot(batch_condition.to(torch.int64), num_classes=7).float().squeeze(1).permute(0, 3, 1, 2)
 
         # Create labels
-        real_label = torch.ones(batchsize, 1, 1, 1).to(device)
-        fake_label = torch.zeros(batchsize, 1, 1, 1).to(device)
+        real_label = torch.ones(len(batch_data), 1, 1, 1).to(device)
+        fake_label = torch.zeros(len(batch_data), 1, 1, 1).to(device)
 
         ############################
         # (1) Update D network
@@ -100,13 +110,13 @@ for epoch in range(num_epochs):
         if (iters % 500 == 0) or ((epoch == num_epochs-1) and (i == len(input_data)-1)):
             with torch.no_grad():
                 img_list.append(fake)
-                torch.save(netG.state_dict(), f'G_image_results/netG_{iters}.pth')
-                torch.save(netD.state_dict(), 'G_image_results/netD.pth')
+                torch.save(netG.state_dict(), f'G_image_results_{lambda_fake}/netG_{iters}.pth')
+                torch.save(netD.state_dict(), f'G_image_results_{lambda_fake}/netD.pth')
                 torch.save({
                     'G_losses': G_losses,
                     'D_losses': D_losses,
                     'img_list': img_list
-                }, 'G_image_results/training_data.pth')
+                }, f'G_image_results_{lambda_fake}/training_data.pth')
             
         iters += 1
 

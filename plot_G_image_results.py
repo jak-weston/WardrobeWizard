@@ -4,10 +4,10 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import dataloader
-import net_graph_h1
+import G_image_model
 # Read results
 #%%
-results = torch.load('G_image_results/training_data.pth')
+results = torch.load('G_image_results_0.8/training_data.pth')
 
 G_losses = results['G_losses']
 D_losses = results['D_losses']
@@ -28,14 +28,15 @@ plt.show()
 # %%
 img_length = len(img_list)
 plot_index = range(len(img_list))
+mean = dataloader.get_image_mean()
 print(plot_index)
 # Plot the generated images
 for i in plot_index:
-    img = img_list[i].cpu().detach()
+    img = img_list[i].cpu().detach() + mean
     plt.figure(figsize=(10,10))
     plt.axis("off")
     plt.title("Generated Images at iteration {}".format(i * 500))
-    plt.imshow(np.transpose(img[0]))
+    plt.imshow(np.transpose(img[1]))
     plt.show()
 # %%
 
@@ -44,7 +45,7 @@ segments = dataloader.load_segmented_images()
 sentence = dataloader.get_text_data()
 
 
-G = net_graph_h1.Generator()
+G = G_image_model.Generator()
 
 # Attempt with specific sentence
 
