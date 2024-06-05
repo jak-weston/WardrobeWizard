@@ -20,13 +20,14 @@ image_mean = get_image_mean()
 
 print("Done with loading Data")
 l = 100
+lambda_real = config['lambda_real']
 lambda_fake = config['lambda_fake']
 lambda_mismatch = config['lambda_mismatch']
 
 #check results directory exists
 import os
-if not os.path.exists(f'G_image_results_{lambda_fake}'):
-    os.makedirs(f'G_image_results_{lambda_fake}')
+if not os.path.exists(f'G_image_results_{lambda_fake}_real_{lambda_real}'):
+    os.makedirs(f'G_image_results_{lambda_fake}_real_{lambda_real}')
 
 # Initialize models
 netG = Generator().to(device)
@@ -110,13 +111,13 @@ for epoch in range(num_epochs):
         if (iters % 500 == 0) or ((epoch == num_epochs-1) and (i == len(input_data)-1)):
             with torch.no_grad():
                 img_list.append(fake)
-                torch.save(netG.state_dict(), f'G_image_results_{lambda_fake}/netG_{iters}.pth')
-                torch.save(netD.state_dict(), f'G_image_results_{lambda_fake}/netD.pth')
+                torch.save(netG.state_dict(), f'G_image_results_{lambda_fake}_real_{lambda_real}/netG_{iters}.pth')
+                torch.save(netD.state_dict(), f'G_image_results_{lambda_fake}_real_{lambda_real}/netD.pth')
                 torch.save({
                     'G_losses': G_losses,
                     'D_losses': D_losses,
                     'img_list': img_list
-                }, f'G_image_results_{lambda_fake}/training_data.pth')
+                }, f'G_image_results_{lambda_fake}_real_{lambda_real}/training_data.pth')
             
         iters += 1
 

@@ -55,10 +55,11 @@ iters = 0
 
 lambda_fake = config['lambda_fake']
 lambda_mismatch = config['lambda_mismatch']
+lambda_real = config['lambda_real']
 #check results directory exists
 import os
-if not os.path.exists(f'G_shape_results_{lambda_fake}'):
-    os.makedirs(f'G_shape_results_{lambda_fake}')
+if not os.path.exists(f'G_shape_results_{lambda_fake}_real_{lambda_real}'):
+    os.makedirs(f'G_shape_results_{lambda_fake}_real_{lambda_real}')
 print("Starting Training Loop...")
 
 num_epochs = 5
@@ -120,13 +121,13 @@ for epoch in range(num_epochs):
         with torch.no_grad():
             fake = netG(fixed_noise, text_batch, condition).detach().cpu()
             img_list.append(fake)
-            torch.save(netG.state_dict(), f'G_shape_results_{lambda_fake}/netG_{iters}.pth')
-            torch.save(netD.state_dict(), f'G_shape_results_{lambda_fake}/netD.pth')
+            torch.save(netG.state_dict(), f'G_shape_results_{lambda_fake}_real_{lambda_real}/netG_{iters}.pth')
+            torch.save(netD.state_dict(), f'G_shape_results_{lambda_fake}_real_{lambda_real}/netD.pth')
             torch.save({
                 'G_losses': G_losses,
                 'D_losses': D_losses,
                 'img_list': img_list
-            }, f'G_shape_results_{lambda_fake}/training_data.pth')
+            }, f'G_shape_results_{lambda_fake}_real_{lambda_real}/training_data.pth')
         
     iters += 1
        

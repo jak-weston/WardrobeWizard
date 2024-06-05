@@ -10,9 +10,10 @@ import matplotlib.pyplot as plt
 
 def plot_image(image):
     plt.imshow(image)
+    plt.colorbar()
     plt.show()
 #%%
-load_number = 11
+load_number = 104
 
 G2 = h5py.File('./data/G2.h5', 'r')
 image = (torch.tensor(np.array(G2['ih'][load_number])) + dataloader.get_image_mean()).permute(2, 1, 0)
@@ -42,17 +43,19 @@ condition = condition.permute(2,1,0).unsqueeze(0) # 1 x 4 x 8 x 8
 
 from G_shape_model import Generator
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = "cpu"
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_shape_results_0.8/netG_96500.pth', map_location=device))
+netG.load_state_dict(torch.load('G_shape_results_0.9_real_0.5/netG_98500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 embedded_sentence = embedded_sentence.to(device)
 condition = condition.to(device)
 
 fake_seg = netG(noise, embedded_sentence, condition)
+
+
 
 fake_segment = fake_seg[0].argmax(dim=0).permute(1,0)
 plot_image(fake_segment.detach().cpu().numpy())
@@ -71,7 +74,7 @@ plot_image(seg.argmax(1)[0].detach().cpu().numpy())
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_image_results_0.8/netG_98500.pth', map_location=device))
+netG.load_state_dict(torch.load('G_image_results_0.8/netG_93500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 
@@ -79,10 +82,34 @@ fake_image = netG(noise, embedded_sentence, seg)
 
 print(fake_image.shape)
 mean = dataloader.get_image_mean()
+
 print(mean.shape)
 
 fake_image = fake_image[0].cpu() + mean
 
+hair_label = 1
+face_label = 2
+
+print(fake_segment.shape)
+fake_segment = fake_segment.permute(1,0).cpu()
+fake_image = fake_image.cpu()
+image = image.permute(2,1,0).cpu()
+segmented_image = segmented_image.squeeze(2).cpu().T
+print(segmented_image.shape)
 print(fake_image.shape)
-plot_image(fake_image.detach().numpy().transpose(2,1,0) )
+
+hair_mask =  (segmented_image == hair_label) | (fake_segment == hair_label) 
+face_mask =  (segmented_image == face_label) #fake_segment == face_label) |
+#Remove face and hair, and replace with original image
+fake_image[0][hair_mask] = image[0][hair_mask]
+fake_image[1][hair_mask] = image[1][hair_mask]
+fake_image[2][hair_mask] = image[2][hair_mask]
+
+fake_image[0][face_mask] = image[0][face_mask]
+fake_image[1][face_mask] = image[1][face_mask]
+fake_image[2][face_mask] = image[2][face_mask]
+
+
+print(fake_image.shape)
+plot_image(fake_image.detach().numpy().transpose(2,1,0))
 #%%

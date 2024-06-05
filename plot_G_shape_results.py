@@ -3,7 +3,7 @@ import torch
 import os
 # Read results
 
-results = torch.load('G_shape_results_0.8/training_data.pth')
+results = torch.load('G_shape_results_0.9_real_0.5/training_data.pth')
 
 G_losses = results['G_losses']
 D_losses = results['D_losses']
@@ -44,11 +44,13 @@ print(len(img_list ))
 for i in range(5):
     img = img_list[-i]
     img = img.argmax(dim=1)
-    plt.figure(figsize=(10,10))
-    plt.axis("off")
-    plt.title("Generated Images")
-    plt.imshow(np.transpose(img[0]))
-    plt.show()
+    for x in range(len(img)):
+        plt.figure(figsize=(10,10))
+        plt.axis("off")
+        plt.title("Generated Images at iteration {}".format((i) * 500))
+        plt.imshow(np.transpose(img[x]))
+        plt.show()
+
 #%%
 import dataloader
 seg = dataloader.load_segmented_images()

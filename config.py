@@ -16,8 +16,10 @@ config['n_c'] = 3
 config['nz'] = 80
 config['nt_input'] = 100
 config['nt'] = 20
-config['lambda_fake'] = 0.8
+config['lambda_fake'] = 0.9
 config['lambda_mismatch'] = 1 - config['lambda_fake']
+
+config['lambda_real']= 0.5
 
 
 # Displaying and logging
