@@ -19,7 +19,7 @@ config['nt'] = 20
 config['lambda_fake'] = 0.9
 config['lambda_mismatch'] = 1 - config['lambda_fake']
 
-config['lambda_real']= 0.5
+config['lambda_real']= 1
 
 
 # Displaying and logging

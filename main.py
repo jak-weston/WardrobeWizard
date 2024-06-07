@@ -13,7 +13,7 @@ def plot_image(image):
     plt.colorbar()
     plt.show()
 #%%
-load_number = 104
+load_number = 1199
 
 G2 = h5py.File('./data/G2.h5', 'r')
 image = (torch.tensor(np.array(G2['ih'][load_number])) + dataloader.get_image_mean()).permute(2, 1, 0)
@@ -47,7 +47,7 @@ device = "cpu"
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_shape_results_0.9_real_0.5/netG_98500.pth', map_location=device))
+netG.load_state_dict(torch.load('G_shape_results_0.9/netG_81500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 embedded_sentence = embedded_sentence.to(device)
@@ -74,7 +74,7 @@ plot_image(seg.argmax(1)[0].detach().cpu().numpy())
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_image_results_0.8/netG_93500.pth', map_location=device))
+netG.load_state_dict(torch.load('G_image_results_0.8/netG_98500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 

@@ -24,20 +24,27 @@ plt.plot(D_losses,label="D")
 plt.xlabel("iterations")
 plt.ylabel("Loss")
 plt.legend()
+plt.savefig("G_image_results_0.8_loss.pdf")
 plt.show()
 # %%
+fig, axs = plt.subplots(2, 4, figsize=(10,5))
+a = 0
 img_length = len(img_list)
 plot_index = range(len(img_list))
-mean = dataloader.get_image_mean()
-print(plot_index)
+mean_image = dataloader.get_image_mean()
 # Plot the generated images
 for i in plot_index:
-    img = img_list[i].cpu().detach() + mean
-    plt.figure(figsize=(10,10))
-    plt.axis("off")
-    plt.title("Generated Images at iteration {}".format(i * 500))
-    plt.imshow(np.transpose(img[1]))
-    plt.show()
+    img = img_list[i]
+
+    if i * 500 in [0, 500, 5500, 11000, 19000, 38000, 70000,85000]:
+        axs[a//4, a%4].imshow(np.transpose(img[0].detach().cpu().numpy()) + mean_image.numpy().transpose(2,1,0))
+        axs[a//4, a%4].axis("off")
+        axs[a//4, a%4].set_title("iteration {}".format(i * 500))
+        a += 1
+
+fig.tight_layout()
+plt.savefig("G_image_results_0.8_images.pdf")
+plt.show()
 # %%
 
 

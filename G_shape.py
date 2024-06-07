@@ -131,15 +131,4 @@ for epoch in range(num_epochs):
         
     iters += 1
        
-
-# Save everything
-
-torch.save(netG.state_dict(), 'G_shape_results/netG.pth')
-torch.save(netD.state_dict(), 'G_shape_results/netD.pth')
-
-torch.save({
-    'G_losses': G_losses,
-    'D_losses': D_losses,
-    'img_list': img_list
-}, f'./G_shape_results_{lambda_fake}/training_data.pth')
 #%%

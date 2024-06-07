@@ -3,7 +3,7 @@ import torch
 import os
 # Read results
 
-results = torch.load('G_shape_results_0.9_real_0.5/training_data.pth')
+results = torch.load('G_shape_results_0.8/training_data.pth')
 
 G_losses = results['G_losses']
 D_losses = results['D_losses']
@@ -21,9 +21,13 @@ plt.plot(D_losses,label="D")
 plt.xlabel("iterations")
 plt.ylabel("Loss")
 plt.legend()
+plt.savefig("G_shape_results_0.9_loss.pdf")
 plt.show()
 
 # %%
+
+fig, axs = plt.subplots(2, 4, figsize=(10,5))
+a = 0
 img_length = len(img_list)
 plot_index = range(len(img_list))
 print(plot_index)
@@ -31,13 +35,26 @@ print(plot_index)
 for i in plot_index:
     img = img_list[i]
     img = img.argmax(dim=1)
-    plt.figure(figsize=(10,10))
-    plt.axis("off")
-    plt.title("Generated Images at iteration {}".format(i * 500))
+    # plt.figure(figsize=(10,10))
+    # plt.axis("off")
+    # plt.title("Generated Images at iteration {}".format(i * 500))
     img = img_list[i]
     img = img.argmax(dim=1)
-    plt.imshow(np.transpose(img[0]))
-    plt.show()
+    # plt.imshow(np.transpose(img[0]))
+
+    if i * 500 in [0, 500, 5500, 11000, 19000, 38000, 70000,85000]:
+        print(a)
+        axs[a//4, a%4].imshow(np.transpose(img[0]))
+        axs[a//4, a%4].axis("off")
+        axs[a//4, a%4].set_title("iteration {}".format(i * 500))
+        a += 1
+
+
+    # plt.show()
+
+fig.tight_layout()
+plt.savefig("G_shape_results_0.9_images.pdf")
+plt.show()
 # %%
 print(len(img_list ))
 # plot last couple of images
