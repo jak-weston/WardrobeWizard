@@ -45,7 +45,7 @@ batchsize = config['batchSize']
 
 #%%
 print("Starting Training Loop...")
-num_epochs = 5
+num_epochs = 10
 
 img_list = []
 G_losses = []
@@ -84,8 +84,10 @@ for epoch in range(num_epochs):
         # Train with fake
         noise = torch.randn(batchsize, nz, 1, 1).to(device)
         fake = netG(noise, batch_encode, batch_condition)
+        #Add noise to fake
+        # fake = fake + torch.randn_like(fake) * 0.1
         output = netD(fake.detach(), batch_encode, batch_condition)
-        errD_fake = lambda_mismatch * criterion(output, fake_label)
+        errD_fake = criterion(output, fake_label)
         errD_fake.backward()
         optimizerD.step()
         errD = errD_real + errD_fake
@@ -96,7 +98,7 @@ for epoch in range(num_epochs):
         ###########################
         netG.zero_grad()
         output = netD(fake,  batch_encode, batch_condition)
-        errG = lambda_fake * criterion(output, real_label)
+        errG = criterion(output, real_label)
         errG.backward()
         optimizerG.step()
         D_G_z2 = output.mean().item()

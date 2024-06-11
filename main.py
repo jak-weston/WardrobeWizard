@@ -10,16 +10,19 @@ import matplotlib.pyplot as plt
 
 def plot_image(image):
     plt.imshow(image)
-    plt.colorbar()
+    # get rid of the axis
+    plt.axis('off')
+    # plt.colorbar()
     plt.show()
 #%%
-load_number = 1199
-
+load_number = 10000
+# sentence = 12400 + 1199
+sentence_num = 16000
 G2 = h5py.File('./data/G2.h5', 'r')
 image = (torch.tensor(np.array(G2['ih'][load_number])) + dataloader.get_image_mean()).permute(2, 1, 0)
-sentence = dataloader.get_raw_text_data()[load_number+1][0]
+sentence = dataloader.get_raw_text_data()[sentence_num][0]
 segmented_image = torch.tensor(np.array(G2['b_'][load_number])).permute(2, 1, 0)
-embedded_sentence = dataloader.get_text_data()[load_number+1]
+embedded_sentence = dataloader.get_text_data()[sentence_num]
 embedded_sentence = embedded_sentence.unsqueeze(0).unsqueeze(2).unsqueeze(3).float()
 
 print(sentence)
@@ -47,7 +50,7 @@ device = "cpu"
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_shape_results_0.9/netG_81500.pth', map_location=device))
+netG.load_state_dict(torch.load('fashionGAN_results/G_shape_results_0.9/netG_81500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 embedded_sentence = embedded_sentence.to(device)
@@ -74,7 +77,7 @@ plot_image(seg.argmax(1)[0].detach().cpu().numpy())
 
 netG = Generator().to(device)
 
-netG.load_state_dict(torch.load('G_image_results_0.8/netG_98500.pth', map_location=device))
+netG.load_state_dict(torch.load('fashionGAN_results/G_image_results_0.8/netG_98500.pth', map_location=device))
 
 noise = torch.randn(1, 80, 1, 1).to(device)
 
@@ -98,7 +101,7 @@ segmented_image = segmented_image.squeeze(2).cpu().T
 print(segmented_image.shape)
 print(fake_image.shape)
 
-hair_mask =  (segmented_image == hair_label) | (fake_segment == hair_label) 
+hair_mask =  (segmented_image == hair_label) #| (fake_segment == hair_label) 
 face_mask =  (segmented_image == face_label) #fake_segment == face_label) |
 #Remove face and hair, and replace with original image
 fake_image[0][hair_mask] = image[0][hair_mask]
@@ -112,4 +115,5 @@ fake_image[2][face_mask] = image[2][face_mask]
 
 print(fake_image.shape)
 plot_image(fake_image.detach().numpy().transpose(2,1,0))
+
 #%%
