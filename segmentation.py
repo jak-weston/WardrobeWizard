@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
 # Load the trimap image
-trimap_path = '../../../../Downloads/the-oxfordiiit-pet-dataset/annotations/annotations/trimaps/Abyssinian_1.png'
+trimap_path = '../../../../Downloads/the-oxfordiiit-pet-dataset/annotations/annotations/trimaps/pug_2.png'
 trimap_image = Image.open(trimap_path)
 
 # Convert the trimap image to a NumPy array
@@ -27,7 +27,6 @@ plt.imshow(normed_trimap, cmap=cmap)
 plt.title('Colorized Trimap Image')
 plt.colorbar(ticks=[0, 1, 2], format=plt.FuncFormatter(lambda val, loc: ['1', '2', '3'][int(val)]))
 plt.show()
-
 # %%
 import os
 import numpy as np
@@ -62,13 +61,3 @@ for filename in os.listdir(trimaps_dir):
         print(f"Processed and saved: {save_path}")
 
 print("All images have been processed and saved.")
-# %%
-from scipy import io
-
-# Load the contents of the .mat file
-mat_contents = io.loadmat('C:/Users/smile/Downloads/the-oxfordiiit-pet-dataset/images/images/Abyssinian_100.mat')
-
-# Print the contents of the file
-print(mat_contents)
-
-# %%
