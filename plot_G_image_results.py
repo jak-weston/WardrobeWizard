@@ -7,7 +7,7 @@ import dataloader
 import G_image_model
 # Read results
 #%%
-results = torch.load('G_image_results_0.8/training_data.pth')
+results = torch.load('pet_results/G_image_results_0.99_real_1/training_data.pth')
 
 G_losses = results['G_losses']
 D_losses = results['D_losses']
@@ -24,7 +24,7 @@ plt.plot(D_losses,label="D")
 plt.xlabel("iterations")
 plt.ylabel("Loss")
 plt.legend()
-plt.savefig("G_image_results_0.8_loss.pdf")
+plt.savefig("G_image_results_0.99_loss.pdf")
 plt.show()
 # %%
 fig, axs = plt.subplots(2, 4, figsize=(10,5))
@@ -36,14 +36,14 @@ mean_image = dataloader.get_image_mean()
 for i in plot_index:
     img = img_list[i]
 
-    if i * 500 in [0, 500, 5500, 11000, 19000, 38000, 70000,85000]:
+    if i * 500 in [0,2000, 4000, 9000]:
         axs[a//4, a%4].imshow(np.transpose(img[0].detach().cpu().numpy()) + mean_image.numpy().transpose(2,1,0))
         axs[a//4, a%4].axis("off")
         axs[a//4, a%4].set_title("iteration {}".format(i * 500))
         a += 1
 
 fig.tight_layout()
-plt.savefig("G_image_results_0.8_images.pdf")
+plt.savefig("G_image_results_0.99_images.pdf")
 plt.show()
 # %%
 
